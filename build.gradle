@@ -1,0 +1,52 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+sourceSets {
+   main {
+      java {
+         srcDir 'src'
+      }
+      resources {
+         srcDir 'resources'
+      }
+   }
+}
+
+jar {
+	manifest {
+    attributes(
+      'Main-Class': 'com.msk.optimise.solution.StartUp'
+    )
+  }
+    baseName = 'KnapsackOptimizerService'
+    version =  '0.1.0'
+    from('resources') {
+   		include '*.xml'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+repositories {
+    mavenCentral()
+}
+
+task runClientExample(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.msk.optimise.solution.StartUp'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+  	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8.2'
+  	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8.2'
+    testCompile("junit:junit")
+}
